@@ -1,0 +1,13 @@
+# Area name. Displayed on the login box.
+AuthName "ParaChute Development Tools - Restricted Area" 
+# Authorization type.
+AuthType Basic 
+# Location of the .htpasswd file containing the usernames & passwords.
+# The path is either absolute or relative to server root. You should
+# note that it's not a best practice to place the .htpasswd file under
+# the server root. For maximum security you should move it elsewhere.
+AuthUserFile /var/www/parachute/.htpasswd 
+# Group authrization disabled.
+AuthGroupFile /dev/null 
+# All users found from the .htpasswd file are allowed to login.
+require valid-user
