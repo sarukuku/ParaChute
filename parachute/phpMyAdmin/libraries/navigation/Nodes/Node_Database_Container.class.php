@@ -29,7 +29,9 @@ class Node_Database_Container extends Node
     {
         parent::__construct($name, Node::CONTAINER);
 
-        if ($GLOBALS['is_create_db_priv']) {
+        if ($GLOBALS['is_create_db_priv']
+            && $GLOBALS['cfg']['ShowCreateDb'] !== false
+        ) {
             $new        = PMA_NodeFactory::getInstance(
                 'Node', _pgettext('Create new database', 'New')
             );
@@ -37,9 +39,9 @@ class Node_Database_Container extends Node
             $new->icon  = PMA_Util::getImage('b_newdb.png', '');
             $new->links = array(
                 'text' => 'server_databases.php?server=' . $GLOBALS['server']
-                        . '&amp;token=' . $GLOBALS['token'],
+                        . '&amp;token=' . $_SESSION[' PMA_token '],
                 'icon' => 'server_databases.php?server=' . $GLOBALS['server']
-                        . '&amp;token=' . $GLOBALS['token'],
+                        . '&amp;token=' . $_SESSION[' PMA_token '],
             );
             $new->classes = 'new_database italics';
             $this->addChild($new);

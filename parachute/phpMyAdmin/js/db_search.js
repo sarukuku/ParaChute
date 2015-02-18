@@ -43,10 +43,10 @@ function loadResult(result_path, table_name, link)
         $('#togglequerybox').hide();
         /**  Load the browse results to the page */
         $("#table-info").show();
-        $('#table-link').attr({"href" : 'sql.php?' + link }).text(table_name);
+        $('#table-link').attr({"href" : 'sql.php' + link }).text(table_name);
         var url = result_path + "#sqlqueryresults";
         $.get(url, {'ajax_request': true, 'is_js_confirmed': true}, function (data) {
-            if (data.success) {
+            if (typeof data !== 'undefined' && data.success) {
                 $('#browse-results').html(data.message);
                 $('html, body')
                     .animate({
@@ -58,7 +58,7 @@ function loadResult(result_path, table_name, link)
             } else {
                 PMA_ajaxShowMessage(data.error, false);
             }
-         });
+        });
     });
 }
 
@@ -83,26 +83,27 @@ function deleteResult(result_path, msg)
             /** Load the deleted option to the page*/
             $('#sqlqueryform').html('');
             var url = result_path + "#result_query, #sqlqueryform";
-            $.get(url, {'ajax_request': true, 'is_js_confirmed': true}, 
+            $.get(url, {'ajax_request': true, 'is_js_confirmed': true},
                 function (data) {
-            if (data.success) {
-                $('#sqlqueryform').html(data.sql_query);
-                /** Refresh the search results after the deletion */
-                document.getElementById('buttonGo').click();
-                $('#togglequerybox').html(PMA_messages.strHideQueryBox);
-                /** Show the results of the deletion option */
-                $('#browse-results').hide();
-                $('#sqlqueryform').show();
-                $('#togglequerybox').show();
-                $('html, body')
-                    .animate({
-                        scrollTop: $("#browse-results").offset().top
-                    }, 1000);
-                PMA_ajaxRemoveMessage($msg);
-            } else {
-                PMA_ajaxShowMessage(data.error, false);
-            }
-         });
+                    if (typeof data !== 'undefined' && data.success) {
+                        $('#sqlqueryform').html(data.sql_query);
+                        /** Refresh the search results after the deletion */
+                        document.getElementById('buttonGo').click();
+                        $('#togglequerybox').html(PMA_messages.strHideQueryBox);
+                        /** Show the results of the deletion option */
+                        $('#browse-results').hide();
+                        $('#sqlqueryform').show();
+                        $('#togglequerybox').show();
+                        $('html, body')
+                            .animate({
+                                scrollTop: $("#browse-results").offset().top
+                            }, 1000);
+                        PMA_ajaxRemoveMessage($msg);
+                    } else {
+                        PMA_ajaxShowMessage(data.error, false);
+                    }
+                }
+            );
         }
     });
 }
@@ -202,7 +203,7 @@ AJAX.registerOnload('db_search.js', function () {
 
         var url = $form.serialize() + "&submit_search=" + $("#buttonGo").val();
         $.post($form.attr('action'), url, function (data) {
-            if (data.success === true) {
+            if (typeof data !== 'undefined' && data.success === true) {
                 // found results
                 $("#searchresults").html(data.message);
 

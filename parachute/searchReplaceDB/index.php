@@ -132,6 +132,14 @@ class icit_srdb_ui extends icit_srdb {
 		// discover environment
 		if ( $bootstrap && $this->is_wordpress() ) {
 
+			// prevent warnings if the charset and collate aren't defined
+			if ( !defined( 'DB_CHARSET') ) {
+				define( 'DB_CHARSET', 'utf8' );
+			}
+			if ( !defined( 'DB_COLLATE') ) {
+				define( 'DB_COLLATE', '' );
+			}
+
 			// populate db details
 			$name 		= DB_NAME;
 			$user 		= DB_USER;
@@ -2224,8 +2232,8 @@ window.console = window.console || { log: function(){} };
 							if ( ! $report.find( '.main-report' ).length ) {
 								$( t.report_tpl )
 									.find( '[data-report="search_replace"]' ).html( strings.search_replace ).end()
-									.find( '[data-report="search"]' ).html( data.search ).end()
-									.find( '[data-report="replace"]' ).html( data.replace ).end()
+									.find( '[data-report="search"]' ).text( data.search ).end()
+									.find( '[data-report="replace"]' ).text( data.replace ).end()
 									.find( '[data-report="dry_run"]' ).html( strings.updates ).end()
 									.prependTo( $report );
 							}
